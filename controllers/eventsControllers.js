@@ -1,9 +1,10 @@
+import { parse } from "dotenv";
 import Event from "../models/event.js";
 
 export const getAllEvents = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = 12;
+    const limit = parseInt(req.query.limit) || 8;
 
     const totalEvents = await Event.countDocuments();
 
