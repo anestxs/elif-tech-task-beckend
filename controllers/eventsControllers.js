@@ -1,4 +1,3 @@
-import { parse } from "dotenv";
 import Event from "../models/event.js";
 
 export const getAllEvents = async (req, res) => {
