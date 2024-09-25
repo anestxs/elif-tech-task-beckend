@@ -7,7 +7,7 @@ import {
 const participantsRouter = express.Router();
 const jsonParser = express.json();
 
-participantsRouter.get("/", getAllParticipants);
-participantsRouter.post("/register/:id", jsonParser, createParticipant);
+participantsRouter.get("/:eventId", getAllParticipants);
+participantsRouter.post("/register/:eventId", jsonParser, createParticipant);
 
 export default participantsRouter;

@@ -2,13 +2,22 @@ import Participant from "../models/participant.js";
 import Event from "../models/event.js";
 import { createParticipantSchema } from "../schemas/participantSchema.js";
 
-export async function getAllParticipants(_, res) {
+export async function getAllParticipants(req, res) {
+  const { eventId } = req.params;
   try {
-    const participants = await Participant.find();
+    const participants = await Participant.find({
+      participantOfEvent: eventId,
+    });
 
-    res.status(200).send(participants);
+    if (participants.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No participants found for this event" });
+    }
+
+    res.status(200).json(participants);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send({ message: "Internal server error!" });
   }
 }
@@ -21,14 +30,14 @@ export async function createParticipant(req, res) {
   }
 
   const { name, email, dateOfBirth } = value;
-  const id = req.params.id;
+  const { eventId } = req.params;
 
   try {
     const event = await Participant.create({
       name,
       email,
       dateOfBirth,
-      participantOfEvent: id,
+      participantOfEvent: eventId,
     });
 
     res.status(201).send(event);
